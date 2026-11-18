@@ -1,0 +1,14 @@
+# octop · compose 编排（由 CachyOS 上 docker inspect 的容器定义反推，2026-11-14）
+# 原 1panel 部署方式弃用后，改为 compose 文件管理，与 immich 同目录结构。
+# 数据：/home/yang/.octop（换装前需备份）
+services:
+  octop:
+  octop:
+    image: ghcr.nju.edu.cn/tencentcloud/octop:latest
+    container_name: octop
+    volumes:
+      - octop-data:/data/.octop
+    ports:
+      - "10.10.10.1:8088:8088"
+      - "192.168.3.9:8088:8088"
+    restart: unless-stopped
