@@ -1,7 +1,7 @@
 # wu/desktop/ibm 三台桌面机的 NixOS flake 入口
 # 输入源说明：
 #   - nixpkgs / nixpkgs-unstable：USTC 镜像 tarball，flake.lock 钉住修订号
-#   - home-manager：github release-26.05（GitHub 当前可达；不通时改用可达 tarball+ 镜像）
+#   - home-manager：gh-proxy.com 加速的 github release-26.05 tarball（前缀失效时换 ghfast.top 等可达镜像）
 # 想升级 nixpkgs-unstable 时：
 #   cd /etc/nixos && sudo -i nix flake update nixpkgs-unstable && nixos-rebuild switch --flake .#wu
 {
@@ -9,7 +9,7 @@
 
   inputs = {
     nixpkgs.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixos-26.05/nixexprs.tar.xz";
-    home-manager.url = "github:nix-community/home-manager/release-26.05";
+    home-manager.url = "tarball+https://gh-proxy.com/https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # 仅用于个别新包（当前：noctalia、wechat、wpsoffice-cn、obsidian、opencode）
     nixpkgs-unstable.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz";
