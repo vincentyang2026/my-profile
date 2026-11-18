@@ -2,7 +2,7 @@
 # 输入源说明：
 #   - nixpkgs / nixpkgs-unstable：USTC 镜像 tarball，flake.lock 钉住修订号
 #   - home-manager：gh-proxy.com 加速的 github release-26.05 tarball（前缀失效时换 ghfast.top 等可达镜像）
-# 想升级 nixpkgs-unstable 时：
+# 想升级 nixpkgs-unstable 时：如果改回github则改回：“github:nix-community/home-manager/release-26.05";
 #   cd /etc/nixos && sudo -i nix flake update nixpkgs-unstable && nixos-rebuild switch --flake .#wu
 {
   description = "wu/desktop/ibm: NixOS + niri + noctalia + fcitx5/rime-wubi";
