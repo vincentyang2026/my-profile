@@ -40,14 +40,14 @@
 
   ############ NFS server：只服务 desktop（10.10.10.2），只在有线网段 ############
   # 语义与 CachyOS 现状完全一致（导出三目录、仅限 10.10.10.2）
-  services.nfs.server = {
-    enable = true;
-    exports = ''
-      /mnt/nas/公司/致卓 10.10.10.2/32(rw,sync,no_subtree_check)
-      /mnt/nas/个人      10.10.10.2/32(rw,sync,no_subtree_check)
-      /mnt/nas/常用数据备份 10.10.10.2/32(rw,sync,no_subtree_check)
-    '';
-  };
+#  services.nfs.server = {
+#    enable = true;
+#    exports = ''
+#      /mnt/nas/company 10.10.10.2/32(rw,sync,no_subtree_check)
+#      /mnt/nas/family   10.10.10.2/32(rw,sync,no_subtree_check)
+#      /mnt/nas/runtine  10.10.10.2/32(rw,sync,no_subtree_check)
+#    '';
+#  };
 
   ############ 防火墙（复刻 ufw 语义） ############
   networking.firewall = {
@@ -79,12 +79,12 @@
   ];
 
   ############ 磁盘挂载 ############
-  boot.supportedFilesystems = [ "ntfs" ];
+#  boot.supportedFilesystems = [ "ntfs" ];
   # sda2 NTFS 数据盘（原 ntfs-3g → ntfs3；属性沿用现状）
-  fileSystems."/mnt/Data_drv" = {
-    device = "/dev/disk/by-uuid/46D4423E0B9547EF";
-    fsType = "ntfs3";
-    options = [ "defaults" "nofail" "noatime" "windows_names" "uid=1000" "gid=1000" "x-systemd.device-timeout=10" ];
+ # fileSystems."/mnt/Data_drv" = {
+ #   device = "/dev/disk/by-uuid/46D4423E0B9547EF";
+ #   fsType = "ntfs3";
+ #   options = [ "defaults" "nofail" "noatime" "windows_names" "uid=1000" "gid=1000" "x-systemd.device-timeout=10" ];
   };
   # sda1 ext4 → /mnt/nas（NFS 导出根，含 公司/个人/常用数据备份/immich 等）
   #   ★由 hardware-configuration.nix 生成；若安装时未扫到，手补：
