@@ -24,7 +24,7 @@
   networking.interfaces.eno1.ipv4.addresses = [ { address = "10.10.10.1"; prefixLength = 24; } ];
   networking.interfaces.eno1.wakeOnLan.enable = true;   # suspend 后保持 wol g（硬件实测支持）
 
-  ############ SSH（无头机器的主要管理通道，走无线 192.168.3.x） ############
+  ############ SSH ############
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;     # 无头无 IPMI：先密钥+密码并存，确认密钥可登后再改为 false
