@@ -40,14 +40,14 @@
 
   ############ NFS server：只服务 desktop（10.10.10.2），只在有线网段 ############
   # 语义与 CachyOS 现状完全一致（导出三目录、仅限 10.10.10.2）
-#  services.nfs.server = {
-#    enable = true;
-#    exports = ''
-#      /mnt/nas/company 10.10.10.2/32(rw,sync,no_subtree_check)
-#      /mnt/nas/family   10.10.10.2/32(rw,sync,no_subtree_check)
-#      /mnt/nas/runtine  10.10.10.2/32(rw,sync,no_subtree_check)
-#    '';
-#  };
+  services.nfs.server = {
+    enable = true;
+    exports = ''
+      /mnt/nas/company 10.10.10.2/32(rw,sync,no_subtree_check)
+      /mnt/nas/family   10.10.10.2/32(rw,sync,no_subtree_check)
+      /mnt/nas/runtine  10.10.10.2/32(rw,sync,no_subtree_check)
+    '';
+  };
 
   ############ 防火墙（复刻 ufw 语义） ############
   networking.firewall = {
@@ -85,14 +85,14 @@
  #   device = "/dev/disk/by-uuid/46D4423E0B9547EF";
  #   fsType = "ntfs3";
  #   options = [ "defaults" "nofail" "noatime" "windows_names" "uid=1000" "gid=1000" "x-systemd.device-timeout=10" ];
-  };
+#  };
   # sda1 ext4 → /mnt/nas（NFS 导出根，含 公司/个人/常用数据备份/immich 等）
   #   ★由 hardware-configuration.nix 生成；若安装时未扫到，手补：
-  #   fileSystems."/mnt/nas" = {
-  #     device = "/dev/disk/by-uuid/5e5f777d-f29e-4c29-94f8-3c265d4c0de0";
-  #     fsType = "ext4";
-  #     options = [ "defaults" "nofail" "noatime" "x-systemd.device-timeout=10" ];
-  #   };
+     fileSystems."/mnt/nas" = {
+       device = "/dev/disk/by-uuid/5e5f777d-f29e-4c29-94f8-3c265d4c0de0";
+       fsType = "ext4";
+       options = [ "defaults" "nofail" "noatime" "x-systemd.device-timeout=10" ];
+     };
   # sda3/sda4（未挂载 ntfs）一律不声明、不挂载（NAS 单 NixOS，不保留 Windows 分区）
 
   ############ 每天 23:00 自动 suspend（保留现状行为） ############
@@ -164,3 +164,4 @@
   # 与安装 ISO 版本一致，装好后不要随意修改（26.11 统一换装时核对）
   system.stateVersion = "26.05";
 }
+
