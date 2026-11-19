@@ -85,7 +85,7 @@
  #   device = "/dev/disk/by-uuid/46D4423E0B9547EF";
  #   fsType = "ntfs3";
  #   options = [ "defaults" "nofail" "noatime" "windows_names" "uid=1000" "gid=1000" "x-systemd.device-timeout=10" ];
-  };
+ #  };
   # sda1 ext4 → /mnt/nas（NFS 导出根，含 公司/个人/常用数据备份/immich 等）
   #   ★由 hardware-configuration.nix 生成；若安装时未扫到，手补：
   #   fileSystems."/mnt/nas" = {
