@@ -81,6 +81,10 @@
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
+    source-han-sans #思源思体
+    source-han-serif #思源宋体
+    lxgw-wenkai     #霞鹜文楷
+    noto-fonts-color-emoji
   ];
 
   ############ 基础工具 ############
@@ -93,7 +97,6 @@
     xwayland-satellite # niri 的 XWayland 兼容层
     alacritty # niri 默认 Super+T 打开的终端；也是 helix.desktop 的启动终端
     fuzzel # niri 默认 Super+D 应用启动器兜底
-    yazi # 终端文件管理器（Rust，依赖极小）
     docker-compose # docker compose 插件/独立 go 版
     adw-gtk3 # GTK3 暗色基础主题（noctalia App Theming GTK 模板前置）
     adwaita-icon-theme # GTK 图标主题（缺失时回退 hicolor）
@@ -110,7 +113,7 @@
 
   ############ 文件管理器：Thunar + U 盘/可移动设备支持 ############
   programs.thunar.enable = true;
-  programs.thunar.plugins = with pkgs.xfce; [
+  programs.thunar.plugins = with pkgs; [
     thunar-volman # 可移动设备自动管理（插入 U 盘时挂载/弹出）
     thunar-archive-plugin # 压缩包右键操作
   ];
@@ -130,6 +133,12 @@
   ############ Flatpak ############
   services.flatpak.enable = true;
   # packages = [ "org.example.App" ];   # 需声明式预装时在此列包 id
+
+  ############ AppImage(binfmt 注册,直接 ./xxx.AppImage 运行) ############
+  #programs.appimage = {
+  #  enable = true;
+  #  binfmt = true;
+  #};
 
   ############ Docker（daemon + 国内镜像加速 + 每周自动清理） ############
   virtualisation.docker = {

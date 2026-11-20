@@ -113,6 +113,27 @@
     };
   };
 
+  ############ 每天 10:00 拉取 obsidian 库（desktop → NAS 数据盘） ############
+  systemd.services.obsidian-pull = {
+    description = "Pull obsidian-vault from desktop";
+    unitConfig.RequiresMountsFor = "/mnt/nas";   # 数据盘 nofail：没挂上别跑，防导出空目录
+    serviceConfig = {
+      Type = "oneshot";
+      User = "yang";
+      ExecStart = "${pkgs.rsync}/bin/rsync -a --delete -e '${pkgs.openssh}/bin/ssh -o StrictHostKeyChecking=accept-new' yang2026@10.10.10.2:/home/yang2026/obsidian-vault/ /mnt/nas/obsidian-vault/";
+    };
+  };
+  systemd.timers.obsidian-pull = {
+    timerConfig = {
+      OnCalendar = "*-*-* 10:00:00";
+      AccuracySec = "30s";
+      Persistent = true;      # 23:00 挂起错过 10 点，唤醒后自动补跑（与 nas-suspend 的 false 恰好相反）
+      Unit = "obsidian-pull.service";
+    };
+    wantedBy = [ "timers.target" ];
+  };
+
+
   ############ immich 备份 cron（脚本回迁后此段与脚本一起生效） ############
   # 现状：22:30 /home/yang/bin/immich-backup.sh + @reboot 180s 后补跑
   # systemd.services.immich-backup = { … }  # 迁完系统后按脚本实况填写
