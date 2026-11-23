@@ -2,6 +2,7 @@
   config,
   pkgs,
   pkgs-unstable,
+  pkgs-wechat,
   ...
 }:
 {
@@ -105,7 +106,7 @@
     qt6Packages.qt6ct # Qt6 平台主题插件：应用 ~/.config/qt6ct/colors 配色（fcitx5-configtool 等 Qt 应用）
     # 借 nixpkgs-unstable（版本新于 26.05 stable）
     pkgs-unstable.noctalia
-    pkgs-unstable.wechat # 微信 Linux 官方客户端 (unfree)
+    pkgs-wechat.wechat # 微信 Linux 官方客户端 (unfree)，钉死修订 ea0dc966，不随 unstable 更新
     pkgs-unstable.wpsoffice-cn # WPS Office 中文版 (unfree)
     pkgs-unstable.obsidian # Obsidian（unstable 最新版，unfree）
     pkgs-unstable.opencode

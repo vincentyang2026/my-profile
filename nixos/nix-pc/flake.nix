@@ -13,17 +13,25 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # 仅用于个别新包（当前：noctalia、wechat、wpsoffice-cn、obsidian、opencode）
     nixpkgs-unstable.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz";
+    # wechat 专用：钉死修订（其钉定的安装包指纹与腾讯 CDN 现挂内容一致，可 CDN 直拉；
+    # 不随 nixpkgs-unstable 更新，避免 wechat 堵住整次 switch）
+    nixpkgs-wechat.url = "tarball+https://gh-proxy.com/https://github.com/NixOS/nixpkgs/archive/ea0dc966d9fd2b66e0bfaae34dd8cf97da81fa7c.tar.gz";
     # Noctalia Greeter（登录界面）：26.05 stable 无此包/模块，故用官方项目 flake；
     # 其 nixpkgs 跟随我们已有的 USTC unstable（wlroots_0_20 等构建依赖都在），不新增下载源
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
     noctalia-greeter.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, noctalia-greeter }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-wechat, home-manager, noctalia-greeter }:
     let
       system = "x86_64-linux";
       # 单包借用 unstable 的 pkgs（只给需要新版本的包用）
       pkgs-unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      # wechat 专用 pkgs（钉死修订 → 哈希永不变化，命中本地 store 或腾讯 CDN 直拉）
+      pkgs-wechat = import nixpkgs-wechat {
         inherit system;
         config.allowUnfree = true;
       };
@@ -33,7 +41,7 @@
       # 等公共部分只在这里写一次，新增机器时加一行 mkHost 调用即可。
       mkHost = hostModule: nixpkgs.lib.nixosSystem {
         system = system;
-        specialArgs = { inherit pkgs-unstable; };
+        specialArgs = { inherit pkgs-unstable pkgs-wechat; };
         modules = [
           hostModule
           noctalia-greeter.nixosModules.default
