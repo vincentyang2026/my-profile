@@ -110,6 +110,13 @@
     pkgs-unstable.wpsoffice-cn # WPS Office 中文版 (unfree)
     pkgs-unstable.obsidian # Obsidian（unstable 最新版，unfree）
     pkgs-unstable.opencode
+
+    ############ 压缩/解压 ############
+    unar # 解压：自动识别 Windows zip 的 GBK 文件名，零乱码（含 RAR 支持）
+    zip # Windows 互传压缩
+    p7zip # .7z 格式命令行
+    zstd # 本地备份打包（tar -I zstd）
+    xarchiver # thunar-archive-plugin 右键「创建归档…」的图形后端
   ];
 
   ############ 文件管理器：Thunar + U 盘/可移动设备支持 ############

@@ -4,6 +4,7 @@
 #   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）
 #   - niri 会话配置（niri/ 目录）
 #   - Helix 编辑器配置 + 文件管理器双击打开文本/代码文件的 MIME 关联
+#   - Thunar 右键「unar 解压到此处」自定义动作（uca.xml，中文零乱码解压）
 # Rime 自己运行时写入的 build/、userdb/、user.yaml 不在此管理，互不冲突。
 # 注意：本文件引用 ./rime/ ./niri/ 相对路径，必须保持在仓库根目录。
 { pkgs, ... }:
@@ -61,6 +62,29 @@ in
   xdg.configFile."xfce4/helpers.rc".text = ''
     [Default]
     TerminalEmulator=alacritty
+  '';
+
+  # Thunar 右键「unar 解压到此处」：unar 自动识别 GBK/UTF-8 文件名，
+  # 避开插件自带「Extract Here」（xarchiver 后端）解 Windows zip 的中文乱码。
+  # 注意：声明后本文件为只读，Thunar GUI「配置自定义动作」的增删改会写失败。
+  xdg.configFile."Thunar/uca.xml".text = ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <actions>
+      <action>
+        <name>unar 解压到此处</name>
+        <icon>package-x-generic</icon>
+        <unique-id>1734900000000</unique-id>
+        <command>unar %F</command>
+        <description>自动识别中文编码，零乱码解压</description>
+        <patterns>*.zip;*.rar;*.7z;*.tar.gz;*.tgz;*.tar.zst;*.tar.bz2;*.tar.xz</patterns>
+        <directories/>
+        <audio-files/>
+        <image-files/>
+        <other-files/>
+        <text-files/>
+        <video-files/>
+      </action>
+    </actions>
   '';
 
   # 文件管理器双击文本/代码文件时，在 Alacritty 里运行 Helix 打开。
