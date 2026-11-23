@@ -15,7 +15,7 @@
     nixpkgs-unstable.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz";
     # wechat 专用：钉死修订（其钉定的安装包指纹与腾讯 CDN 现挂内容一致，可 CDN 直拉；
     # 不随 nixpkgs-unstable 更新，避免 wechat 堵住整次 switch）
-    nixpkgs-wechat.url = "tarball+https://gh-proxy.com/https://github.com/NixOS/nixpkgs/archive/ea0dc966d9fd2b66e0bfaae34dd8cf97da81fa7c.tar.gz";
+    nixpkgs-wechat.url = "tarball+https://gh-proxy.com/https://github.com/NixOS/nixpkgs/archive/master.tar.gz";
     # Noctalia Greeter（登录界面）：26.05 stable 无此包/模块，故用官方项目 flake；
     # 其 nixpkgs 跟随我们已有的 USTC unstable（wlroots_0_20 等构建依赖都在），不新增下载源
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
