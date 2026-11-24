@@ -1,6 +1,6 @@
 # yang 的 home-manager 配置
 # 记家目录内以声明管理的文件；本例：
-#   - fcitx5/rime 五笔拼音方案文件（nixpkgs rime-data 不含 wubi，无法作为系统包安装）
+#   - fcitx5/rime 五笔拼音方案文件（rime-data 自 26.05 已含 rime-wubi，此处保留官方原版以锁定版本；用户目录优先于系统包数据）
 #   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）
 #   - niri 会话配置（niri/ 目录）
 #   - Helix 编辑器配置 + 文件管理器双击打开文本/代码文件的 MIME 关联
