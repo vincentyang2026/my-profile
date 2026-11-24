@@ -1,12 +1,11 @@
 # yang 的 home-manager 配置
 # 记家目录内以声明管理的文件；本例：
-#   - fcitx5/rime 五笔拼音方案文件（rime-data 自 26.05 已含 rime-wubi，此处保留官方原版以锁定版本；用户目录优先于系统包数据）
-#   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）
+#   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）；方案文件由 fcitx5-rime 自带的 rime-data 提供（26.05+ 含 rime-wubi），无需手动铺设
 #   - niri 会话配置（niri/ 目录）
 #   - Helix 编辑器配置 + 文件管理器双击打开文本/代码文件的 MIME 关联
 #   - Thunar 右键「unar 解压到此处」自定义动作（uca.xml，中文零乱码解压）
 # Rime 自己运行时写入的 build/、userdb/、user.yaml 不在此管理，互不冲突。
-# 注意：本文件引用 ./rime/ ./niri/ 相对路径，必须保持在仓库根目录。
+# 注意：本文件引用 ./niri/ 相对路径，必须保持在仓库根目录。
 { pkgs, ... }:
 
 # Helix(.desktop) 关联的全部 MIME 类型：文件管理器双击文本/代码文件直接用 Helix 打开。
@@ -38,12 +37,6 @@ in
 
   # 启用 xdg 模块：desktopEntries / mimeApps 依赖此项，否则声明会被静默忽略
   xdg.enable = true;
-
-  home.file.".local/share/fcitx5/rime/wubi_pinyin.schema.yaml".source =
-    ./rime/wubi_pinyin.schema.yaml;
-
-  home.file.".local/share/fcitx5/rime/wubi86.dict.yaml".source =
-    ./rime/wubi86.dict.yaml;
 
   home.file.".local/share/fcitx5/rime/default.custom.yaml".text = ''
     patch:

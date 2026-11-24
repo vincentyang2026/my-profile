@@ -23,7 +23,6 @@
 | `shared.nix` | 共享 | 公共配置（niri/noctalia greeter/fcitx5/字体/docker/镜像/用户 yang 等） |
 | `home.nix` | 共享 | home-manager：helix 双击打开、niri/rime 部署 |
 | `niri/config.kdl`, `niri/noctalia.kdl` | 共享 | niri 会话与窗口规则 |
-| `rime/wubi_pinyin.schema.yaml`, `rime/wubi86.dict.yaml` | 共享 | 五笔方案与词库 |
 | `wu-configuration.nix` | wu 专属 | 主机名/bootloader/zram(4G)/NTFS `/mnt/Data2`/stateVersion |
 | `wu-hardware-configuration.nix` | wu 专属 | 硬件扫描（UUID/分区/swap，勿手改） |
 | `ibm-configuration.nix` | ibm 专属 | **最终可用版（已实测 dry-build）**：主机名/bootloader/zram(8G)/NTFS `/mnt/Data`(p4 卷标"数据盘")；并入后获得 Noctalia Greeter（取代现 tuigreet）与 helix 双击功能 |
