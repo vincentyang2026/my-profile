@@ -81,6 +81,16 @@
   };
   # 可选退路：specialisation 一个 nouveau/无驱动 项，驱动翻车时从启动菜单进入救援
 
+  ############ 本地大模型 ollama（RTX 5060 Ti 8G，CUDA 推理） ############
+  # ollama-cuda：CUDA 运行库（cudart/libcublas/cccl…）随服务闭包整套而入，无全局 cuda、无 nvcc；
+  # NVIDIA 内核模块与 libcuda 由上方 hardware.nvidia 段提供——二者缺一则 ollama 静默回退 CPU。
+  # 驱动/内核/ollama/CUDA 全部被 flake.lock 锁定为一张闭包，升级原子、可回滚。
+  # 模型目录为服务数据 /var/lib/ollama（换装时把旧 ~/.ollama/models rsync 过去即可）。
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda;
+  };
+
   ############ 开机自动唤醒 NAS（10.10.10.1，仅 desktop 承担此职责） ############
   # NAS（192.168.3.9，有线 eno1 MAC 1c:69:7a:49:52:1c）每天 23:00 自动 suspend；
   # desktop 每次开机经 enp131s0 直连发 WOL 魔术包唤醒它。直连不经过路由/交换机，包必达。
