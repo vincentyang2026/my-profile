@@ -85,11 +85,26 @@
   # ollama-cuda：CUDA 运行库（cudart/libcublas/cccl…）随服务闭包整套而入，无全局 cuda、无 nvcc；
   # NVIDIA 内核模块与 libcuda 由上方 hardware.nvidia 段提供——二者缺一则 ollama 静默回退 CPU。
   # 驱动/内核/ollama/CUDA 全部被 flake.lock 锁定为一张闭包，升级原子、可回滚。
-  # 模型目录为服务数据 /var/lib/ollama（换装时把旧 ~/.ollama/models rsync 过去即可）。
+  # 模型目录为服务数据 /var/lib/ollama（换装时把旧 ~/.ollama 整目录 rsync 到 /var/lib/private/ollama/）。
+  # 调用方：desk 本机 pi/opencode（127.0.0.1）+ NAS 的 docker octop（10.10.10.1 → 10.10.10.2 直连）。
+  # 环境变量继承自 CachyOS 用户级单元，是 8G 显存跑 9B @32k 的调优组合（flash-attn + q8_0 KV），勿随意改。
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda;
+    host = "0.0.0.0"; # 127.0.0.1 与 10.10.10.2 同时可达
+    environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "32768";
+      OLLAMA_KEEP_ALIVE = "24h";
+      OLLAMA_NUM_PARALLEL = "1";
+      OLLAMA_MAX_LOADED_MODELS = "1";
+      OLLAMA_FLASH_ATTENTION = "1";
+      OLLAMA_KV_CACHE_TYPE = "q8_0";
+      OLLAMA_NOPRUNE = "1";
+    };
   };
+  # 11434 仅在有线直连口放行（NAS docker octop 的来向）；无线口不暴露。
+  # shared.nix 未声明 firewall，NixOS 默认启用防火墙（ssh 由 openssh 模块自动放行），故此处必须显式开。
+  networking.firewall.interfaces.enp131s0.allowedTCPPorts = [ 11434 ];
 
   ############ 开机自动唤醒 NAS（10.10.10.1，仅 desktop 承担此职责） ############
   # NAS（192.168.3.9，有线 eno1 MAC 1c:69:7a:49:52:1c）每天 23:00 自动 suspend；
