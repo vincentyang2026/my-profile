@@ -11,7 +11,7 @@
     nixpkgs.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixos-26.05/nixexprs.tar.xz";
     home-manager.url = "tarball+https://gh-proxy.com/https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # 仅用于个别新包（当前：noctalia、wechat、wpsoffice-cn、obsidian、opencode）
+    # 仅用于个别新包（当前：noctalia、wpsoffice-cn、obsidian、opencode、desktop 的 ollama；wechat 已切独立钉死源）
     nixpkgs-unstable.url = "tarball+https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz";
     # wechat 专用：钉死修订（其钉定的安装包指纹与腾讯 CDN 现挂内容一致，可 CDN 直拉；
     # 不随 nixpkgs-unstable 更新，避免 wechat 堵住整次 switch）

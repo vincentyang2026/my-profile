@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 {
   imports = [
     ./desktop-hardware-configuration.nix # 安装环境 nixos-generate-config 生成后补入（勿手抄）
@@ -84,13 +84,15 @@
   ############ 本地大模型 ollama（RTX 5060 Ti 8G，CUDA 推理） ############
   # ollama-cuda：CUDA 运行库（cudart/libcublas/cccl…）随服务闭包整套而入，无全局 cuda、无 nvcc；
   # NVIDIA 内核模块与 libcuda 由上方 hardware.nvidia 段提供——二者缺一则 ollama 静默回退 CPU。
-  # 驱动/内核/ollama/CUDA 全部被 flake.lock 锁定为一张闭包，升级原子、可回滚。
+  # 分层锁定：驱动/内核随 stable 主干；ollama+CUDA 运行库随 nixpkgs-unstable 的 rev（flake.lock 各自独立）。
+  # 两层接口 = libcuda.so + /dev/nvidia*，由 NVIDIA minor version compatibility 保证（stable 580 驱动满足 Blackwell≥570 与 CUDA 13≥580）。
+  # 若未来 unstable ollama 要求更高驱动：退路 nvidiaPackages.beta（stable 内）或锁 ollama rev 不 update。
   # 模型目录为服务数据 /var/lib/ollama（换装时把旧 ~/.ollama 整目录 rsync 到 /var/lib/private/ollama/）。
   # 调用方：desk 本机 pi/opencode（127.0.0.1）+ NAS 的 docker octop（10.10.10.1 → 10.10.10.2 直连）。
   # 环境变量继承自 CachyOS 用户级单元，是 8G 显存跑 9B @32k 的调优组合（flash-attn + q8_0 KV），勿随意改。
   services.ollama = {
     enable = true;
-    package = pkgs.ollama-cuda;
+    package = pkgs-unstable.ollama-cuda; # 应用层借 unstable，与驱动/内核分层
     host = "0.0.0.0"; # 127.0.0.1 与 10.10.10.2 同时可达
     environmentVariables = {
       OLLAMA_CONTEXT_LENGTH = "32768";
