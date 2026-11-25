@@ -57,8 +57,9 @@ in
     TerminalEmulator=alacritty
   '';
 
-  # Thunar 右键「unar 解压到此处」：unar 自动识别 GBK/UTF-8 文件名，
-  # 避开插件自带「Extract Here」（xarchiver 后端）解 Windows zip 的中文乱码。
+  # Thunar 右键自定义动作（声明式，GUI 增删改会写失败，改这里）：
+  # 1)「unar 解压到此处」：unar 自动识别 GBK/UTF-8 文件名，解 Windows zip 零乱码。
+  # 2)「压缩为 zip」：zip-here 脚本打包选中文件/目录，与 Windows 互传。
   # 注意：声明后本文件为只读，Thunar GUI「配置自定义动作」的增删改会写失败。
   xdg.configFile."Thunar/uca.xml".text = ''
     <?xml version="1.0" encoding="UTF-8"?>
@@ -70,6 +71,20 @@ in
         <command>unar %F</command>
         <description>自动识别中文编码，零乱码解压</description>
         <patterns>*.zip;*.rar;*.7z;*.tar.gz;*.tgz;*.tar.zst;*.tar.bz2;*.tar.xz</patterns>
+        <directories/>
+        <audio-files/>
+        <image-files/>
+        <other-files/>
+        <text-files/>
+        <video-files/>
+      </action>
+      <action>
+        <name>压缩为 zip</name>
+        <icon>package-x-generic</icon>
+        <unique-id>1734900000001</unique-id>
+        <command>zip-here %F</command>
+        <description>打包选中文件/目录为 zip（Windows 互传）</description>
+        <patterns>*</patterns>
         <directories/>
         <audio-files/>
         <image-files/>

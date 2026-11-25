@@ -116,14 +116,22 @@
     zip # Windows 互传压缩
     p7zip # .7z 格式命令行
     zstd # 本地备份打包（tar -I zstd）
-    xarchiver # thunar-archive-plugin 右键「创建归档…」的图形后端
+    (writeShellScriptBin "zip-here" ''
+      # Thunar「压缩为 zip」后端：cd 到选中文件目录，用 basename 打包（正确处理空格/多选/目录）
+      dir=$(dirname "$1"); cd "$dir" || exit 1
+      base=$(basename "$1"); base="''${base%.*}"   # 归档名取第一个文件的主名
+      files=(); for f in "$@"; do files+=("$(basename "$f")"); done
+      exec zip -r "$base.zip" "''${files[@]}"
+    '') # 右键「压缩为 zip」，与 home.nix 的 uca.xml 自定义动作配套
   ];
 
   ############ 文件管理器：Thunar + U 盘/可移动设备支持 ############
   programs.thunar.enable = true;
   programs.thunar.plugins = with pkgs; [
     thunar-volman # 可移动设备自动管理（插入 U 盘时挂载/弹出）
-    thunar-archive-plugin # 压缩包右键操作
+    # thunar-archive-plugin 已移除（2026-11-25）：其右键功能依赖 .tap wrapper，官方仅带
+    # ark/engrampa/file-roller/peazip，xarchiver/file-roller 方案要么不支持要么多拖 943MB 依赖。
+    # 压缩/解压改由 uca.xml 自定义动作承担（zip-here 压缩 + unar 解压），零额外依赖。
   ];
   services.gvfs.enable = true;     # 回收站、挂载集成（Thunar 依赖）
   services.tumbler.enable = true;  # 缩略图服务
