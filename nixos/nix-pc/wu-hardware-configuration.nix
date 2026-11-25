@@ -16,19 +16,20 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/7a2a8bda-ee8b-4638-8e8b-7198d4afec06";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      # 2026-11-24 手工补压缩：26.05 安装器声明了 mountOptions 但 generate-config 未落地
+      options = [ "compress=zstd:1" "noatime" ];
     };
 
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/7a2a8bda-ee8b-4638-8e8b-7198d4afec06";
       fsType = "btrfs";
-      options = [ "subvol=home" "compress=zstd" ];
+      options = [ "subvol=home" "compress=zstd:1" "noatime" ];
     };
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/7a2a8bda-ee8b-4638-8e8b-7198d4afec06";
       fsType = "btrfs";
-      options = [ "subvol=nix" "compress=zstd" ];
+      options = [ "subvol=nix" "compress=zstd:1" "noatime" ];
     };
 
   fileSystems."/boot" =
