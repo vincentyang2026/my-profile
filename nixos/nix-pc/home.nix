@@ -1,12 +1,12 @@
 # yang 的 home-manager 配置
 # 记家目录内以声明管理的文件；本例：
-#   - fcitx5/rime 五笔拼音方案文件（nixpkgs rime-data 不含 wubi，无法作为系统包安装）
-#   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）
+#   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）；方案文件由 fcitx5-rime 自带的 rime-data 提供（26.05+ 含 rime-wubi），无需手动铺设
 #   - niri 会话配置（niri/ 目录）
 #   - Noctalia 截图标注管道（仅 wu 试运行）：config 通道 screenshot.toml + state 覆盖层 activation 补丁
 #   - Helix 编辑器配置 + 文件管理器双击打开文本/代码文件的 MIME 关联
+#   - Thunar 右键「unar 解压到此处」自定义动作（uca.xml，中文零乱码解压）
 # Rime 自己运行时写入的 build/、userdb/、user.yaml 不在此管理，互不冲突。
-# 注意：本文件引用 ./rime/ ./niri/ 相对路径，必须保持在仓库根目录。
+# 注意：本文件引用 ./niri/ 相对路径，必须保持在仓库根目录。
 { pkgs, lib, osConfig, ... }:
 
 # Helix(.desktop) 关联的全部 MIME 类型：文件管理器双击文本/代码文件直接用 Helix 打开。
@@ -39,12 +39,6 @@ in
   # 启用 xdg 模块：desktopEntries / mimeApps 依赖此项，否则声明会被静默忽略
   xdg.enable = true;
 
-  home.file.".local/share/fcitx5/rime/wubi_pinyin.schema.yaml".source =
-    ./rime/wubi_pinyin.schema.yaml;
-
-  home.file.".local/share/fcitx5/rime/wubi86.dict.yaml".source =
-    ./rime/wubi86.dict.yaml;
-
   home.file.".local/share/fcitx5/rime/default.custom.yaml".text = ''
     patch:
       schema_list:
@@ -58,7 +52,7 @@ in
   # satty 本体装在 wu-configuration.nix 的 environment.systemPackages（pipe_command
   # 经 /bin/sh -lc 解析命令，系统 PATH 必中；home.packages 不进 systemd 用户会话 PATH）。
   # 层级说明（官方文档）：~/.config/noctalia/*.toml 是声明基础层，按文件名字母序合并；
-  # GUI 覆盖层 ~/.local/state/noctalia/settings.toml 优先级更高——本机该文件已被 GUI
+  # GUI 覆盖层 ~/.local/state/noctalia/settings.toml 优先级更高——wu 的该文件已被 GUI
   # 写入 annotate = true，故还需下方 activation 补丁把覆盖层对齐到声明值。
   xdg.configFile."noctalia/screenshot.toml" = lib.mkIf (osConfig.networking.hostName == "wu") {
     text = ''
@@ -95,6 +89,29 @@ in
   xdg.configFile."xfce4/helpers.rc".text = ''
     [Default]
     TerminalEmulator=alacritty
+  '';
+
+  # Thunar 右键「unar 解压到此处」：unar 自动识别 GBK/UTF-8 文件名，
+  # 避开插件自带「Extract Here」（xarchiver 后端）解 Windows zip 的中文乱码。
+  # 注意：声明后本文件为只读，Thunar GUI「配置自定义动作」的增删改会写失败。
+  xdg.configFile."Thunar/uca.xml".text = ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <actions>
+      <action>
+        <name>unar 解压到此处</name>
+        <icon>package-x-generic</icon>
+        <unique-id>1734900000000</unique-id>
+        <command>unar %F</command>
+        <description>自动识别中文编码，零乱码解压</description>
+        <patterns>*.zip;*.rar;*.7z;*.tar.gz;*.tgz;*.tar.zst;*.tar.bz2;*.tar.xz</patterns>
+        <directories/>
+        <audio-files/>
+        <image-files/>
+        <other-files/>
+        <text-files/>
+        <video-files/>
+      </action>
+    </actions>
   '';
 
   # 文件管理器双击文本/代码文件时，在 Alacritty 里运行 Helix 打开。
