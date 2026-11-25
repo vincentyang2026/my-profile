@@ -10,7 +10,7 @@
   ############ UEFI + systemd-boot（Windows 双系统共存；p5 作 NixOS 的 ESP，不碰 p1） ############
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10; # 最多保留 10 个启动项
+  boot.loader.systemd-boot.configurationLimit = 5; # 最多保留 5 个启动项
 
   # 24G 内存：不启用 zram（zram 属于各主机文件，shared 中无此项）
 

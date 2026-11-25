@@ -11,7 +11,7 @@
   ############ UEFI + systemd-boot（单 NixOS，无 Windows） ############
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10;  # 与其它 Nix 机器一致：最多保留 10 个启动项
+  boot.loader.systemd-boot.configurationLimit = 5;  # 与其它 Nix 机器一致：最多保留 5 个启动项
 
   ############ 网络 ############
   networking.useDHCP = false;   # NM 自管 DHCP，显式关闭全局 dhcpcd 避免双客户端竞态

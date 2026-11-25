@@ -14,7 +14,7 @@
   ############ UEFI + systemd-boot ############
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10; # 最多保留 10 个启动项
+  boot.loader.systemd-boot.configurationLimit = 5; # 最多保留 5 个启动项
   boot.loader.systemd-boot.consoleMode = "0"; # 0 / 1 / 2 / auto / max / keep
 
   ############ zram ############
