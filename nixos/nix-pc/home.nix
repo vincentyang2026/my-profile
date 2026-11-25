@@ -60,6 +60,8 @@ in
   # Thunar 右键自定义动作（声明式，GUI 增删改会写失败，改这里）：
   # 1)「unar 解压到此处」：unar 自动识别 GBK/UTF-8 文件名，解 Windows zip 零乱码。
   # 2)「压缩为 zip」：zip-here 脚本打包选中文件/目录，与 Windows 互传。
+  # 3)「在此处打开终端」：Thunar 4.20 上游移除了内置右键项（改做 F4 内嵌终端面板），
+  #    故用 terminal-here 脚本补回；helpers.rc 仅保留给其他 Xfce 组件使用。
   # 注意：声明后本文件为只读，Thunar GUI「配置自定义动作」的增删改会写失败。
   xdg.configFile."Thunar/uca.xml".text = ''
     <?xml version="1.0" encoding="UTF-8"?>
@@ -84,6 +86,20 @@ in
         <unique-id>1734900000001</unique-id>
         <command>zip-here %F</command>
         <description>打包选中文件/目录为 zip（Windows 互传）</description>
+        <patterns>*</patterns>
+        <directories/>
+        <audio-files/>
+        <image-files/>
+        <other-files/>
+        <text-files/>
+        <video-files/>
+      </action>
+      <action>
+        <name>在此处打开终端</name>
+        <icon>utilities-terminal</icon>
+        <unique-id>1734900000002</unique-id>
+        <command>terminal-here %d %F</command>
+        <description>用 alacritty 打开终端（空白处=当前目录，右键目录=该目录）</description>
         <patterns>*</patterns>
         <directories/>
         <audio-files/>

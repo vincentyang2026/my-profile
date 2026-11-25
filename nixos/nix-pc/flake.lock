@@ -20,7 +20,7 @@
     "nixpkgs": {
       "locked": {
         "lastModified": 315532800,
-        "narHash": "sha256-pLM4uV148b0eRALcfeaBoiw7K2M77XPihI0iNzxytAw=",
+        "narHash": "sha256-RThZ6/XvhVczW74iClJaGo9+fXjvfm5mvvzTy6hrcYU=",
         "type": "tarball",
         "url": "https://mirrors.ustc.edu.cn/nix-channels/nixos-26.05/nixexprs.tar.xz"
       },
@@ -32,7 +32,7 @@
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 315532800,
-        "narHash": "sha256-tFvjrdir1xJuUxdmsv+yK9PiZ4IMnFCeT8z0iayTlso=",
+        "narHash": "sha256-3Xq+XlDu5l+UJ0cc+Jigs84+tz7Qu92NgXVHgJwC52M=",
         "type": "tarball",
         "url": "https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz"
       },
@@ -43,8 +43,8 @@
     },
     "nixpkgs-wechat": {
       "locked": {
-        "lastModified": 1795406527,
-        "narHash": "sha256-BacjWcjqKd6u2o/COlwsiC4gBEZJqc0F/ZZaEzmNE8o=",
+        "lastModified": 1795586628,
+        "narHash": "sha256-oJdi4ib54CX0y2Sncqhh0CURGM1X0izat4PtSSVTgj0=",
         "type": "tarball",
         "url": "https://gh-proxy.com/https://github.com/NixOS/nixpkgs/archive/master.tar.gz"
       },

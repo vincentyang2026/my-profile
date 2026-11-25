@@ -123,6 +123,13 @@
       files=(); for f in "$@"; do files+=("$(basename "$f")"); done
       exec zip -r "$base.zip" "''${files[@]}"
     '') # 右键「压缩为 zip」，与 home.nix 的 uca.xml 自定义动作配套
+    (writeShellScriptBin "terminal-here" ''
+      # Thunar「在此处打开终端」（Thunar 4.20 已移除内置项，改由 uca.xml 动作承担）：
+      # $1 = %d（首文件目录 / 空白处右键时为当前目录），$2... = %F（选中文件）
+      target=$1
+      if [ $# -ge 2 ] && [ -d "$2" ]; then target=$2; fi   # 右键目录时打开该目录本身
+      exec alacritty --working-directory "$target"
+    '') # 右键「在此处打开终端」，与 home.nix 的 uca.xml 自定义动作配套
   ];
 
   ############ 文件管理器：Thunar + U 盘/可移动设备支持 ############
