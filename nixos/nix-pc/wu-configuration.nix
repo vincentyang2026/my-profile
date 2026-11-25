@@ -35,13 +35,6 @@
   # 如需视频硬件解码可加：
   # hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
 
-  ############ 截图标注：satty（仅本机试运行） ############
-  # Noctalia 内置标注器不注册 text-input，中文无法输入（上游 issue #5072 未修），
-  # 截图后管道交给 satty 标注（声明配置在 home.nix：config 通道 screenshot.toml
-  # + state 覆盖层 activation 补丁）。
-  # 放系统包而非 home.packages：pipe_command 经 /bin/sh -lc 解析命令，系统 PATH 必中。
-  environment.systemPackages = [ pkgs.satty ];
-
   # 与安装时使用的 NixOS 版本一致（ISO: nixos-graphical-26.05.13936... → "26.05"），
   # 安装后不要随意修改！
   system.stateVersion = "26.05";

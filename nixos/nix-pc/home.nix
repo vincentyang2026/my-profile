@@ -2,12 +2,11 @@
 # 记家目录内以声明管理的文件；本例：
 #   - default.custom.yaml 启用 schema：wubi_pinyin（五笔拼音混输）+ luna_pinyin（朙月拼音）；方案文件由 fcitx5-rime 自带的 rime-data 提供（26.05+ 含 rime-wubi），无需手动铺设
 #   - niri 会话配置（niri/ 目录）
-#   - Noctalia 截图标注管道（仅 wu 试运行）：config 通道 screenshot.toml + state 覆盖层 activation 补丁
 #   - Helix 编辑器配置 + 文件管理器双击打开文本/代码文件的 MIME 关联
 #   - Thunar 右键「unar 解压到此处」自定义动作（uca.xml，中文零乱码解压）
 # Rime 自己运行时写入的 build/、userdb/、user.yaml 不在此管理，互不冲突。
 # 注意：本文件引用 ./niri/ 相对路径，必须保持在仓库根目录。
-{ pkgs, lib, osConfig, ... }:
+{ pkgs, ... }:
 
 # Helix(.desktop) 关联的全部 MIME 类型：文件管理器双击文本/代码文件直接用 Helix 打开。
 # desktopEntries 与 mimeApps 共用此列表；增删类型后需 nixos-rebuild switch 生效。
@@ -45,39 +44,6 @@ in
         - schema: wubi_pinyin
         - schema: luna_pinyin
   '';
-
-  # 截图标注管道（仅 wu 启用试运行）：Noctalia 内置标注器不注册 text-input，
-  # 中文无法输入（上游 issue #5072 未修），改由 satty 接管标注环节。
-  # 数据流：Noctalia 截图 → PNG 走 stdin → `satty -f -` 窗口标注 → 文件/剪贴板。
-  # satty 本体装在 wu-configuration.nix 的 environment.systemPackages（pipe_command
-  # 经 /bin/sh -lc 解析命令，系统 PATH 必中；home.packages 不进 systemd 用户会话 PATH）。
-  # 层级说明（官方文档）：~/.config/noctalia/*.toml 是声明基础层，按文件名字母序合并；
-  # GUI 覆盖层 ~/.local/state/noctalia/settings.toml 优先级更高——wu 的该文件已被 GUI
-  # 写入 annotate = true，故还需下方 activation 补丁把覆盖层对齐到声明值。
-  xdg.configFile."noctalia/screenshot.toml" = lib.mkIf (osConfig.networking.hostName == "wu") {
-    text = ''
-      [shell.screenshot]
-      annotate = false
-      pipe_to_command = true
-      pipe_command = "satty -f -"
-    '';
-  };
-
-  # GUI 覆盖层幂等补丁（仅 wu）：state settings.toml 归 GUI 管理不能改成只读，
-  # 只把 [shell.screenshot] 段的三个键对齐到声明值，其余键不动；
-  # 每次 switch / 登录重跑，GUI 之后手动改回去也会被再次对齐（声明为准）。
-  home.activation.alignNoctaliaScreenshot = lib.mkIf (osConfig.networking.hostName == "wu")
-    (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      sed_bin="${pkgs.gnused}/bin/sed"
-      grep_bin="${pkgs.gnugrep}/bin/grep"
-      f="$HOME/.local/state/noctalia/settings.toml"
-      if [ -f "$f" ]; then
-        $DRY_RUN_CMD "$sed_bin" -i '/^\[shell\.screenshot\]/,/^\[/ s/^annotate = .*/annotate = false/' "$f"
-        if ! "$sed_bin" -n '/^\[shell\.screenshot\]/,/^\[/p' "$f" | "$grep_bin" -q 'pipe_to_command'; then
-          $DRY_RUN_CMD "$sed_bin" -i '/^\[shell\.screenshot\]/a pipe_to_command = true\npipe_command = "satty -f -"' "$f"
-        fi
-      fi
-    '');
 
   # niri + noctalia 会话集成：确保 autostart / 启动器绑定 / noctalia.kdl 始终存在
   # 源文件位于 /etc/nixos/niri/，修改后需 nixos-rebuild switch 生效
