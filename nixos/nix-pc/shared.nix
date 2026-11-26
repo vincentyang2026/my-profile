@@ -210,8 +210,11 @@
   ];
 
   ############ 用户（多机统一用户名 yang） ############
+  # fish：CachyOS 时期的终端体验（灰字自动建议/智能 Tab 补全/语法高亮）来自它，换 NixOS 后显式声明回来
+  programs.fish.enable = true;
   users.users.yang = {
     isNormalUser = true;
+    shell = pkgs.fish;
     description = "yang";
     extraGroups = [
       "wheel"
