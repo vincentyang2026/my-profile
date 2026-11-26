@@ -20,11 +20,18 @@
     # 其 nixpkgs 跟随我们已有的 USTC unstable（wlroots_0_20 等构建依赖都在），不新增下载源
     noctalia-greeter.url = "github:noctalia-dev/noctalia-greeter";
     noctalia-greeter.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # pi coding agent（官方 earendil-works/pi，stable 分支）：源码走 gh-proxy 免 SNI；
+    # 其自带 nixpkgs 跟随我们的 USTC unstable（rebuild 时不再从 github 拉 nixpkgs tarball）。
+    # 其 nixpkgs-darwin-x64 input 仅 macOS 求值用到，x86_64-linux 不触发下载。
+    pi.url = "tarball+https://gh-proxy.com/https://github.com/earendil-works/pi/archive/refs/heads/stable.tar.gz";
+    pi.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-wechat, home-manager, noctalia-greeter }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-wechat, home-manager, noctalia-greeter, pi }:
     let
       system = "x86_64-linux";
+      # pi coding agent 包（official flake stable 分支），经 specialArgs 下发三机可用
+      pi-pkg = pi.packages.${system}.default;
       # 单包借用 unstable 的 pkgs（只给需要新版本的包用）
       pkgs-unstable = import nixpkgs-unstable {
         inherit system;
@@ -41,7 +48,7 @@
       # 等公共部分只在这里写一次，新增机器时加一行 mkHost 调用即可。
       mkHost = hostModule: nixpkgs.lib.nixosSystem {
         system = system;
-        specialArgs = { inherit pkgs-unstable pkgs-wechat; };
+        specialArgs = { inherit pkgs-unstable pkgs-wechat pi-pkg; };
         modules = [
           hostModule
           noctalia-greeter.nixosModules.default
