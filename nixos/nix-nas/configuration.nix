@@ -169,8 +169,11 @@
   ];
 
   ############ 用户 ############
+  # fish：与 PC 三机一致（灰字自动建议/智能 Tab 补全/语法高亮）
+  programs.fish.enable = true;
   users.users.yang = {
     isNormalUser = true;
+    shell = pkgs.fish;
     description = "yang";
     uid = 1000;   # 固定 uid，与 /mnt/Data_drv 的 uid=1000/gid=1000 对齐，防未来漂移
     extraGroups = [ "wheel" "networkmanager" "docker" ];
