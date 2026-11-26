@@ -1,4 +1,4 @@
-{ config, pkgs, pi-pkg, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     ./wu-hardware-configuration.nix # 本机硬件扫描结果（nixos-generate-config 生成）
@@ -34,11 +34,6 @@
   # Intel 集显（HD 5500）：无需任何声明，内核 i915 自动加载。
   # 如需视频硬件解码可加：
   # hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
-
-  ############ pi coding agent（官方 flake，stable 分支；试点机，验证后再推广 desktop/ibm） ############
-  environment.systemPackages = [
-    pi-pkg
-  ];
 
   # 与安装时使用的 NixOS 版本一致（ISO: nixos-graphical-26.05.13936... → "26.05"），
   # 安装后不要随意修改！

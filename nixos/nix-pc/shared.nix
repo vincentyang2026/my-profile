@@ -3,6 +3,7 @@
   pkgs,
   pkgs-unstable,
   pkgs-wechat,
+  pi-pkg,
   ...
 }:
 {
@@ -110,6 +111,7 @@
     pkgs-unstable.wpsoffice-cn # WPS Office 中文版 (unfree)
     pkgs-unstable.obsidian # Obsidian（unstable 最新版，unfree）
     pkgs-unstable.opencode
+    pi-pkg # pi coding agent（官方 flake earendil-works/pi stable 分支；升级只动 flake.lock 的 pi 节点）
 
     ############ 压缩/解压 ############
     unar # 解压：自动识别 Windows zip 的 GBK 文件名，零乱码（含 RAR 支持）
