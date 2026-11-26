@@ -29,8 +29,8 @@
 
   ############ NFS 自动挂载（NAS 10.10.10.1；仅本机启用） ############
   boot.supportedFilesystems = [ "nfs" ];
-  fileSystems."/mnt/致卓" = {
-    device = "10.10.10.1:/mnt/nas/公司/致卓";
+  fileSystems."/mnt/company" = {
+    device = "10.10.10.1:/mnt/nas/company";
     fsType = "nfs";
     options = [
       "_netdev"
@@ -42,8 +42,8 @@
       "vers=4.2"
     ];
   };
-  fileSystems."/mnt/个人" = {
-    device = "10.10.10.1:/mnt/nas/个人";
+  fileSystems."/mnt/family" = {
+    device = "10.10.10.1:/mnt/nas/family";
     fsType = "nfs";
     options = [
       "_netdev"
@@ -55,8 +55,8 @@
       "vers=4.2"
     ];
   };
-  fileSystems."/mnt/常用数据备份" = {
-    device = "10.10.10.1:/mnt/nas/常用数据备份";
+  fileSystems."/mnt/runtine" = {
+    device = "10.10.10.1:/mnt/nas/runtine";
     fsType = "nfs";
     options = [
       "_netdev"
@@ -112,7 +112,7 @@
   # NAS（192.168.3.9，有线 eno1 MAC 1c:69:7a:49:52:1c）每天 23:00 自动 suspend；
   # desktop 每次开机经 enp131s0 直连发 WOL 魔术包唤醒它。直连不经过路由/交换机，包必达。
   # 仅 desktop 配置此项（wu 不参与唤醒）。etherwake 需 root 权限，服务以 root 跑即可。
-  environment.systemPackages = with pkgs; [ etherwake ];
+  environment.systemPackages =  [ pkgs.wakeonlan ];
   systemd.services.wake-nas = {
     description = "Send WOL magic packet to NAS at boot";
     wantedBy = [ "multi-user.target" ];
@@ -121,7 +121,7 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.etherwake}/bin/etherwake -i enp131s0 1c:69:7a:49:52:1c";
+      ExecStart = "${pkgs.wakeonlan}/bin/wakeonlan -i 10.10.10.1 1c:69:7a:49:52:1c";
     };
   };
 

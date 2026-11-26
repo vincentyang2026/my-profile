@@ -71,7 +71,7 @@
         # desktop-configuration.nix（已备好 NVIDIA/静态IP/NFS/WOL 配置）才可求值。
         # 参考规划文档：~/download/nix规划/04-hosts-desktop.md
         #
-        # desktop = mkHost ./desktop-configuration.nix;
+        desktop = mkHost ./desktop-configuration.nix;
       };
     };
 }

@@ -43,4 +43,20 @@
 
   # 本机已在 26.05 安装；26.11 统一升级时改为 "26.11"，安装代数不变原则
   system.stateVersion = "26.05";
+
+  ############ Docker（daemon + 国内镜像加速 + 每周自动清理；自 shared.nix 下放至各主机，desktop 不启用） ############
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [ "--all" ];
+    };
+    daemon.settings = {
+      registry-mirrors = [
+        "https://docker.m.daocloud.io"
+        "https://docker.1ms.run"
+      ];
+    };
+  };
 }

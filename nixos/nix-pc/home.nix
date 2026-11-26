@@ -48,6 +48,7 @@ in
   # niri + noctalia 会话集成：确保 autostart / 启动器绑定 / noctalia.kdl 始终存在
   # 源文件位于 /etc/nixos/niri/，修改后需 nixos-rebuild switch 生效
   xdg.configFile."niri/config.kdl".source = ./niri/config.kdl;
+  xdg.configFile."niri/noctalia.kdl".source = ./niri/noctalia.kdl;
 
   # Thunar「在此处打开终端」的首选终端设置。
   # 系统未装 xfce4-settings，exo 4.20 走回退模式：

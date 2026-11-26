@@ -164,20 +164,20 @@
   #};
 
   ############ Docker（daemon + 国内镜像加速 + 每周自动清理） ############
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-      dates = "weekly";
-      flags = [ "--all" ];
-    };
-    daemon.settings = {
-      registry-mirrors = [
-        "https://docker.m.daocloud.io"
-        "https://docker.1ms.run"
-      ];
-    };
-  };
+#  virtualisation.docker = {
+ #   enable = true;
+ #   autoPrune = {
+ #     enable = true;
+ #     dates = "weekly";
+ #     flags = [ "--all" ];
+  #  };
+  #  daemon.settings = {
+   #   registry-mirrors = [
+    #    "https://docker.m.daocloud.io"
+    #    "https://docker.1ms.run"
+    #  ];
+    #};
+  #};
 
   ############ Flake 支持（Noctalia 需要用到） ############
   nix.settings.experimental-features = [

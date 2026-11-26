@@ -38,4 +38,20 @@
   # 与安装时使用的 NixOS 版本一致（ISO: nixos-graphical-26.05.13936... → "26.05"），
   # 安装后不要随意修改！
   system.stateVersion = "26.05";
+
+  ############ Docker（daemon + 国内镜像加速 + 每周自动清理；自 shared.nix 下放至各主机，desktop 不启用） ############
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [ "--all" ];
+    };
+    daemon.settings = {
+      registry-mirrors = [
+        "https://docker.m.daocloud.io"
+        "https://docker.1ms.run"
+      ];
+    };
+  };
 }
