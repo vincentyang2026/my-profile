@@ -96,7 +96,7 @@
     host = "0.0.0.0"; # 127.0.0.1 与 10.10.10.2 同时可达
     environmentVariables = {
       OLLAMA_CONTEXT_LENGTH = "32768";
-      OLLAMA_KEEP_ALIVE = "24h";
+      OLLAMA_KEEP_ALIVE = "15m";
       OLLAMA_NUM_PARALLEL = "1";
       OLLAMA_MAX_LOADED_MODELS = "1";
       OLLAMA_FLASH_ATTENTION = "1";
