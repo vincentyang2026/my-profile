@@ -99,7 +99,7 @@
     xwayland-satellite # niri 的 XWayland 兼容层
     alacritty # niri 默认 Super+T 打开的终端；也是 helix.desktop 的启动终端
     fuzzel # niri 默认 Super+D 应用启动器兜底
-    docker-compose # docker compose 插件/独立 go 版
+    # docker-compose # docker compose 插件/独立 go 版（PC 三机已弃 docker，见下方 Docker 块注释）
     adw-gtk3 # GTK3 暗色基础主题（noctalia App Theming GTK 模板前置）
     adwaita-icon-theme # GTK 图标主题（缺失时回退 hicolor）
     glib # 提供 gsettings，用于应用 GTK 主题设置
@@ -216,7 +216,7 @@
     extraGroups = [
       "wheel"
       "networkmanager"
-      "docker"
+      # "docker" # docker daemon 停用后组不存在，恢复 Docker 时一并解开
     ];
     # 初始密码（首次登录后建议执行 passwd 修改）
     initialPassword = "changeme";
