@@ -111,6 +111,8 @@
   ############ 开机自动唤醒 NAS（10.10.10.1，仅 desktop 承担此职责） ############
   # NAS（192.168.3.9，有线 eno1 MAC 1c:69:7a:49:52:1c）每天 23:00 自动 suspend；
   # desktop 每次开机经 enp131s0 直连发 WOL 魔术包唤醒它。直连不经过路由/交换机，包必达。
+  # 注意：目标必须写广播 10.10.10.255，不能写 10.10.10.1 —— NAS 睡眠时 ARP 无法解析，
+  # 单播魔术包会被内核丢弃（曾因此开机唤醒失效，2026-11-28 复盘）。
   # 仅 desktop 配置此项（wu 不参与唤醒）。etherwake 需 root 权限，服务以 root 跑即可。
   environment.systemPackages =  [ pkgs.wakeonlan ];
   systemd.services.wake-nas = {
@@ -121,7 +123,8 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.wakeonlan}/bin/wakeonlan -i 10.10.10.1 1c:69:7a:49:52:1c";
+      ExecStart = "${pkgs.wakeonlan}/bin/wakeonlan -i 10.10.10.255 -p 9 1c:69:7a:49:52:1c";
+      ExecStartPost = "${pkgs.wakeonlan}/bin/wakeonlan -i 10.10.10.255 -p 7 1c:69:7a:49:52:1c";
     };
   };
 
