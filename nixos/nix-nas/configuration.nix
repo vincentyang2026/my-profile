@@ -93,8 +93,17 @@
        fsType = "ext4";
        options = [ "defaults" "nofail" "noatime" "x-systemd.device-timeout=10" ];
      };
-  # sda3/sda4（未挂载 ntfs）一律不声明、不挂载（NAS 单 NixOS，不保留 Windows 分区）
-
+  # sda3挂载 ext4
+     fileSystems."/mnt/photo" = {
+       device = "/dev/disk/by-uuid/cd5f7934-06d2-498d-8e06-adf794fb37ff";
+       fsType = "ext4";
+       options = [ "noatime" "x-systemd.device-timeout=30" ];
+       # 故意不加 nofail：盘不在就该让启动报错，而不是让 docker 静默造空目录
+     };
+     systemd.services.docker = {
+       after    = [ "mnt-photo.mount" ];
+       requires = [ "mnt-photo.mount" ];
+     };
   ############ 每天 23:00 自动 suspend（保留现状行为） ############
   # 唤醒通道：desktop 每次开机经 enp131s0 直连发 WOL 魔术包（MAC 1c:69:7a:49:52:1c）
   systemd.services.nas-suspend = {
